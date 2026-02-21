@@ -230,7 +230,7 @@ int main(int argc, char *argv[]) {
         // modelViewProjMatrix = glm::rotate(modelViewProjMatrix, static_cast<float>(time * 2.0f), glm::vec3(1.0f, 0.0f, 0.0f));  // Ось X
 
         // Плавное вращение вперед-назад квадрата
-        modelViewProjMatrix = glm::rotate(modelViewProjMatrix, static_cast<float>(time * 2.0f), glm::vec3(0.3f, 0.3f, 0.3f));  // вокруг X Y Z
+        // modelViewProjMatrix = glm::rotate(modelViewProjMatrix, static_cast<float>(time * 2.0f), glm::vec3(0.3f, 0.3f, 0.3f));  // вокруг X Y Z
 
         // выставляем матрицу трансформации в пространство OpenGL
         glUniformMatrix4fv(modelViewProjMatrixLocation, 1, false, glm::value_ptr(modelViewProjMatrix));
