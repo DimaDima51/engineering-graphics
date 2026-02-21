@@ -131,11 +131,6 @@ int main(int argc, char *argv[]) {
     glewInit();
     CHECK_GL_ERRORS();
     
-    // инициализация расширений
-    glewExperimental = GL_TRUE;
-    glewInit();
-    CHECK_GL_ERRORS();
-
     // Инициализация отладки
     if(glDebugMessageCallback){
         glEnable(GL_DEBUG_OUTPUT);
