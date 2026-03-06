@@ -176,8 +176,9 @@ int main(int argc, char *argv[]) {
     GLuint VBO = 0;
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // glBufferData(GL_ARRAY_BUFFER, triangleVertexCount * sizeof(Vertex), triangleVertexes, GL_STATIC_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, squareVertexCount * sizeof(Vertex), squareVertexes, GL_STATIC_DRAW);
+    // glBufferData(GL_ARRAY_BUFFER, triangleVertexCount * sizeof(Vertex), triangleVertexes, GL_STATIC_DRAW); // Треугольник
+    // glBufferData(GL_ARRAY_BUFFER, squareVertexCount * sizeof(Vertex), squareVertexes, GL_STATIC_DRAW); // Квадрат
+    glBufferData(GL_ARRAY_BUFFER, cubeVertexCount * sizeof(Vertex), cubeVertexes, GL_STATIC_DRAW); // Куб
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     CHECK_GL_ERRORS();
@@ -224,13 +225,27 @@ int main(int argc, char *argv[]) {
         glUseProgram (shaderProgram);
 
         // матрица модель-вид-проекция
-        mat4 modelViewProjMatrix = mat4(1.0);
+        mat4 modelViewProjMatrix = mat4(1.0f);
 
-        // Плавное вращение вперед-назад треугольиника
-        // modelViewProjMatrix = glm::rotate(modelViewProjMatrix, static_cast<float>(time * 2.0f), glm::vec3(1.0f, 0.0f, 0.0f));  // Ось X
+        mat4 modelMatrix = mat4(1.0f);
+        mat4 viewMatrix = mat4(1.0f);
+        mat4 projectionMatrix = mat4(1.0f);
 
-        // Плавное вращение вперед-назад квадрата
-        modelViewProjMatrix = glm::rotate(modelViewProjMatrix, static_cast<float>(time * 2.0f), glm::vec3(0.3f, 0.3f, 0.3f));  // вокруг X Y Z
+        // Модель - поворачиваем куб
+        modelMatrix = glm::rotate(modelMatrix, static_cast<float>(time * 2.0f), glm::vec3(0.1f, 0.1f, 0.1f));
+
+        // Вид - отодвигаем камеру назад, чтобы видеть куб целиком
+        viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, -5.0f));
+
+        // Проекция - создаем перспективу
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+        float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+        projectionMatrix = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
+
+        // Итоговая матрица
+        modelViewProjMatrix = projectionMatrix * viewMatrix * modelMatrix;
+
 
         // выставляем матрицу трансформации в пространство OpenGL
         glUniformMatrix4fv(modelViewProjMatrixLocation, 1, false, glm::value_ptr(modelViewProjMatrix));
@@ -249,7 +264,7 @@ int main(int argc, char *argv[]) {
         CHECK_GL_ERRORS();
         
         // рисуем
-        glDrawArrays(GL_TRIANGLES, 0, squareVertexCount); // draw points 0-3 from the currently bound VAO with current in-use shader
+        glDrawArrays(GL_TRIANGLES, 0, cubeVertexCount); // draw points 0-3 from the currently bound VAO with current in-use shader
         
         // VBO off
         glBindBuffer(GL_ARRAY_BUFFER, 0);
