@@ -59,7 +59,7 @@ GLuint createShader(){
     );
 
     // Фрагментный шейдер
-    const char* fragmentShader = STRINGIFY_SHADER(
+   const char* fragmentShader = STRINGIFY_SHADER(
         precision mediump float;
         varying vec3 vColor;
         varying vec2 vTexCoord;
@@ -67,6 +67,18 @@ GLuint createShader(){
         uniform sampler2D uTexture;
 
         void main () {
+            // Создаем квадратную дырку в центре (координаты от 0 до 1)
+            // Центр текстурных координат = (0.5, 0.5)
+            float holeMin = 0.35;  // левая/нижняя граница дырки
+            float holeMax = 0.65;  // правая/верхняя граница дырки
+            
+            // Если пиксель внутри области дырки - отбрасываем его
+            if (vTexCoord.x > holeMin && vTexCoord.x < holeMax && 
+                vTexCoord.y > holeMin && vTexCoord.y < holeMax) {
+                discard;  // это и есть "дырка"!
+            }
+            
+            // Все остальные пиксели рисуем как обычно
             gl_FragColor = texture2D(uTexture, vTexCoord);
         }
     );
