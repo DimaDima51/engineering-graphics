@@ -166,6 +166,7 @@ int main(int argc, char *argv[]) {
     // аттрибуты вершин шейдера
     int posAttribLocation = glGetAttribLocation(shaderProgram, "aPos");
     int colorAttribLocation = glGetAttribLocation(shaderProgram, "aColor");
+    int texCoordAttribLocation = glGetAttribLocation(shaderProgram, "aTexCoord");
     CHECK_GL_ERRORS();
 
     // юниформы шейдера
@@ -255,12 +256,19 @@ int main(int argc, char *argv[]) {
         // sizeof(Vertex) - размер блока данных о вершине
         // OFFSETOF(Vertex, color) - смещение от начала
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
         // Позиции
         glEnableVertexAttribArray(posAttribLocation);
         glVertexAttribPointer(posAttribLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), OFFSETOF(Vertex, pos));
+
         // Цвет вершин
         glEnableVertexAttribArray(colorAttribLocation);
         glVertexAttribPointer(colorAttribLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), OFFSETOF(Vertex, color));
+
+        // Координаты текстур
+        glEnableVertexAttribArray(texCoordAttribLocation);
+        glVertexAttribPointer(texCoordAttribLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), OFFSETOF(Vertex, texCoord));
+
         CHECK_GL_ERRORS();
         
         // рисуем

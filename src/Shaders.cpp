@@ -42,27 +42,32 @@ GLuint createShaderFromSources(const char* vertexShader, const char* fragmentSha
 GLuint createShader(){
     // Шейдер вершин
     const char* vertexShader = STRINGIFY_SHADER(
-        // vertex attribute
         attribute vec3 aPos;
         attribute vec3 aColor;
-        // uniforms
+        attribute vec2 aTexCoord;
+        
         uniform mat4 uModelViewProjMat;
-        // output
+        
         varying vec3 vColor;
+        varying vec2 vTexCoord;
 
         void main () {
-            vec4 vertexVec4 = vec4(aPos, 1.0);      // последняя компонента 1, тк это точка
-            // вычисляем позицию точки в пространстве OpenGL
-            gl_Position = uModelViewProjMat * vertexVec4;
-            // цвет и текстурные координаты просто пробрасываем для интерполяции
+            gl_Position = uModelViewProjMat * vec4(aPos, 1.0);
             vColor = aColor;
+            vTexCoord = aTexCoord;
         }
     );
+
+    // Фрагментный шейдер
     const char* fragmentShader = STRINGIFY_SHADER(
+        precision mediump float;
         varying vec3 vColor;
+        varying vec2 vTexCoord;
+        
+        uniform sampler2D uTexture;
 
         void main () {
-            gl_FragColor = vec4(vColor, 1.0);
+            gl_FragColor = texture2D(uTexture, vTexCoord);
         }
     );
 

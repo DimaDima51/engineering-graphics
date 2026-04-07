@@ -5,12 +5,12 @@
 
 using namespace glm;
 
-struct Vertex{
+struct Vertex {
     vec3 pos;
     vec3 color;
+    vec2 texCoord; // координаты текстуры
 
-    // constructor
-    Vertex(vec3 inPos, vec3 inColor);
+    Vertex(vec3 inPos, vec3 inColor, vec2 inTexCoord);
 };
 
 #endif
