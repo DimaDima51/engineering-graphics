@@ -6,151 +6,70 @@
 
 using namespace glm;
 
-// данные о вершинах
-/*
-// ТРЕУГОЛЬНИК
-int triangleVertexCount = 3;
-Vertex triangleVertexes[] = {
-    //                ВЕРШИНА                   ЦВЕТ
-    Vertex(vec3( 0.0f,  1.0f, 0.0f), vec3(0.5f, 0.0f, 0.2f)),  // верх
-    Vertex(vec3(-1.0f, -1.0f, 0.0f), vec3(0.0f, 0.5f, 0.2f)),  // лево
-    Vertex(vec3( 1.0f, -1.0f, 0.0f), vec3(0.6f, 0.7f, 0.0f))   // право
-};
-*/
-
-/*
-// КВАДРАТ
-int squareVertexCount = 6;  // 2 треугольника = 6 вершин
-Vertex squareVertexes[] = {
-    // Первый треугольник (нижний левый)
-    Vertex(vec3(-1.0f, -1.0f, 0.0f), vec3(1.0f, 0.0f, 0.0f)),  // лево-низ (красный)
-    Vertex(vec3( 1.0f, -1.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f)),  // право-низ (зеленый)
-    Vertex(vec3(-1.0f,  1.0f, 0.0f), vec3(0.0f, 0.0f, 1.0f)),  // лево-верх (синий)
-    
-    // Второй треугольник (верхний правый)
-    Vertex(vec3( 1.0f, -1.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f)),  // право-низ (зеленый)
-    Vertex(vec3( 1.0f,  1.0f, 0.0f), vec3(1.0f, 1.0f, 0.0f)),  // право-верх (желтый)
-    Vertex(vec3(-1.0f,  1.0f, 0.0f), vec3(0.0f, 0.0f, 1.0f))   // лево-верх (синий)
-};
-*/
-
-/*
-// КУБ без текстур
-int cubeVertexCount = 36;  // 6 граней * 2 треугольника * 3 вершины = 36 вершин
-Vertex cubeVertexes[] = {
-    // Передняя грань (Z = 1.0)
-    Vertex(vec3(-1.0f, -1.0f, 1.0f), vec3(1.0f, 0.0f, 0.0f)),
-    Vertex(vec3( 1.0f, -1.0f, 1.0f), vec3(0.0f, 1.0f, 0.0f)),
-    Vertex(vec3(-1.0f,  1.0f, 1.0f), vec3(0.0f, 0.0f, 1.0f)),
-    
-    Vertex(vec3( 1.0f, -1.0f, 1.0f), vec3(0.0f, 1.0f, 0.0f)),
-    Vertex(vec3( 1.0f,  1.0f, 1.0f), vec3(1.0f, 1.0f, 0.0f)),
-    Vertex(vec3(-1.0f,  1.0f, 1.0f), vec3(0.0f, 0.0f, 1.0f)),
-    
-    // Задняя грань (Z = -1.0)
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(1.0f, 0.5f, 0.0f)),
-    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.0f)),
-    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f)),
-    
-    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.0f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f)),
-    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f)),
-    
-    // Левая грань (X = -1.0)
-    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(1.0f, 0.0f, 0.5f)),
-    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.0f, 1.0f, 0.5f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f)),
-    
-    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.0f, 1.0f, 0.5f)),
-    Vertex(vec3(-1.0f,  1.0f,  1.0f), vec3(0.5f, 1.0f, 0.0f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f)),
-    
-    // Правая грань (X = 1.0)
-    Vertex(vec3( 1.0f, -1.0f,  1.0f), vec3(1.0f, 0.5f, 0.5f)),
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.5f)),
-    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.5f, 0.5f, 1.0f)),
-    
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.5f)),
-    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(1.0f, 0.5f, 1.0f)),
-    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.5f, 0.5f, 1.0f)),
-    
-    // Нижняя грань (Y = -1.0)
-    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(0.8f, 0.2f, 0.2f)),
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.2f, 0.8f, 0.2f)),
-    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.2f, 0.2f, 0.8f)),
-    
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.2f, 0.8f, 0.2f)),
-    Vertex(vec3( 1.0f, -1.0f,  1.0f), vec3(0.8f, 0.8f, 0.2f)),
-    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.2f, 0.2f, 0.8f)),
-    
-    // Верхняя грань (Y = 1.0)
-    Vertex(vec3(-1.0f,  1.0f,  1.0f), vec3(1.0f, 0.8f, 0.8f)),
-    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.8f, 1.0f, 0.8f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.8f, 0.8f, 1.0f)),
-    
-    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.8f, 1.0f, 0.8f)),
-    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(1.0f, 0.8f, 1.0f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.8f, 0.8f, 1.0f))
-};
-*/
-// Куб с текстурой
-
 int cubeVertexCount = 36;
+
+// Определяем нормали для каждой грани
+vec3 nFront  = vec3( 0.0f,  0.0f,  1.0f);
+vec3 nBack   = vec3( 0.0f,  0.0f, -1.0f);
+vec3 nLeft   = vec3(-1.0f,  0.0f,  0.0f);
+vec3 nRight  = vec3( 1.0f,  0.0f,  0.0f);
+vec3 nBottom = vec3( 0.0f, -1.0f,  0.0f);
+vec3 nTop    = vec3( 0.0f,  1.0f,  0.0f);
+
 Vertex cubeVertexes[] = {
     // Передняя грань (Z = 1.0)
-    Vertex(vec3(-1.0f, -1.0f, 1.0f), vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)),
-    Vertex(vec3( 1.0f, -1.0f, 1.0f), vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 0.0f)),
-    Vertex(vec3(-1.0f,  1.0f, 1.0f), vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 1.0f)),
+    Vertex(vec3(-1.0f, -1.0f, 1.0f), vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f), nFront),
+    Vertex(vec3( 1.0f, -1.0f, 1.0f), vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 0.0f), nFront),
+    Vertex(vec3(-1.0f,  1.0f, 1.0f), vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 1.0f), nFront),
     
-    Vertex(vec3( 1.0f, -1.0f, 1.0f), vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 0.0f)),
-    Vertex(vec3( 1.0f,  1.0f, 1.0f), vec3(1.0f, 1.0f, 0.0f), vec2(1.0f, 1.0f)),
-    Vertex(vec3(-1.0f,  1.0f, 1.0f), vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 1.0f)),
+    Vertex(vec3( 1.0f, -1.0f, 1.0f), vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 0.0f), nFront),
+    Vertex(vec3( 1.0f,  1.0f, 1.0f), vec3(1.0f, 1.0f, 0.0f), vec2(1.0f, 1.0f), nFront),
+    Vertex(vec3(-1.0f,  1.0f, 1.0f), vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 1.0f), nFront),
     
     // Задняя грань (Z = -1.0)
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(1.0f, 0.5f, 0.0f), vec2(0.0f, 0.0f)),
-    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.0f), vec2(1.0f, 0.0f)),
-    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f), vec2(0.0f, 1.0f)),
+    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(1.0f, 0.5f, 0.0f), vec2(0.0f, 0.0f), nBack),
+    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.0f), vec2(1.0f, 0.0f), nBack),
+    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f), vec2(0.0f, 1.0f), nBack),
     
-    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.0f), vec2(1.0f, 0.0f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f), vec2(1.0f, 1.0f)),
-    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f), vec2(0.0f, 1.0f)),
+    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.0f), vec2(1.0f, 0.0f), nBack),
+    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.0f, 1.0f, 1.0f), vec2(1.0f, 1.0f), nBack),
+    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f), vec2(0.0f, 1.0f), nBack),
     
     // Левая грань (X = -1.0)
-    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(1.0f, 0.0f, 0.5f), vec2(0.0f, 0.0f)),
-    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.0f, 1.0f, 0.5f), vec2(1.0f, 0.0f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f), vec2(0.0f, 1.0f)),
+    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(1.0f, 0.0f, 0.5f), vec2(0.0f, 0.0f), nLeft),
+    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.0f, 1.0f, 0.5f), vec2(1.0f, 0.0f), nLeft),
+    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f), vec2(0.0f, 1.0f), nLeft),
     
-    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.0f, 1.0f, 0.5f), vec2(1.0f, 0.0f)),
-    Vertex(vec3(-1.0f,  1.0f,  1.0f), vec3(0.5f, 1.0f, 0.0f), vec2(1.0f, 1.0f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f), vec2(0.0f, 1.0f)),
+    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.0f, 1.0f, 0.5f), vec2(1.0f, 0.0f), nLeft),
+    Vertex(vec3(-1.0f,  1.0f,  1.0f), vec3(0.5f, 1.0f, 0.0f), vec2(1.0f, 1.0f), nLeft),
+    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.5f, 0.0f, 1.0f), vec2(0.0f, 1.0f), nLeft),
     
     // Правая грань (X = 1.0)
-    Vertex(vec3( 1.0f, -1.0f,  1.0f), vec3(1.0f, 0.5f, 0.5f), vec2(0.0f, 0.0f)),
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.5f), vec2(1.0f, 0.0f)),
-    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.5f, 0.5f, 1.0f), vec2(0.0f, 1.0f)),
+    Vertex(vec3( 1.0f, -1.0f,  1.0f), vec3(1.0f, 0.5f, 0.5f), vec2(0.0f, 0.0f), nRight),
+    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.5f), vec2(1.0f, 0.0f), nRight),
+    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.5f, 0.5f, 1.0f), vec2(0.0f, 1.0f), nRight),
     
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.5f), vec2(1.0f, 0.0f)),
-    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(1.0f, 0.5f, 1.0f), vec2(1.0f, 1.0f)),
-    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.5f, 0.5f, 1.0f), vec2(0.0f, 1.0f)),
+    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.5f, 1.0f, 0.5f), vec2(1.0f, 0.0f), nRight),
+    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(1.0f, 0.5f, 1.0f), vec2(1.0f, 1.0f), nRight),
+    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.5f, 0.5f, 1.0f), vec2(0.0f, 1.0f), nRight),
     
     // Нижняя грань (Y = -1.0)
-    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(0.8f, 0.2f, 0.2f), vec2(0.0f, 0.0f)),
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.2f, 0.8f, 0.2f), vec2(1.0f, 0.0f)),
-    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.2f, 0.2f, 0.8f), vec2(0.0f, 1.0f)),
+    Vertex(vec3(-1.0f, -1.0f, -1.0f), vec3(0.8f, 0.2f, 0.2f), vec2(0.0f, 0.0f), nBottom),
+    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.2f, 0.8f, 0.2f), vec2(1.0f, 0.0f), nBottom),
+    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.2f, 0.2f, 0.8f), vec2(0.0f, 1.0f), nBottom),
     
-    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.2f, 0.8f, 0.2f), vec2(1.0f, 0.0f)),
-    Vertex(vec3( 1.0f, -1.0f,  1.0f), vec3(0.8f, 0.8f, 0.2f), vec2(1.0f, 1.0f)),
-    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.2f, 0.2f, 0.8f), vec2(0.0f, 1.0f)),
+    Vertex(vec3( 1.0f, -1.0f, -1.0f), vec3(0.2f, 0.8f, 0.2f), vec2(1.0f, 0.0f), nBottom),
+    Vertex(vec3( 1.0f, -1.0f,  1.0f), vec3(0.8f, 0.8f, 0.2f), vec2(1.0f, 1.0f), nBottom),
+    Vertex(vec3(-1.0f, -1.0f,  1.0f), vec3(0.2f, 0.2f, 0.8f), vec2(0.0f, 1.0f), nBottom),
     
     // Верхняя грань (Y = 1.0)
-    Vertex(vec3(-1.0f,  1.0f,  1.0f), vec3(1.0f, 0.8f, 0.8f), vec2(0.0f, 0.0f)),
-    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.8f, 1.0f, 0.8f), vec2(1.0f, 0.0f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.8f, 0.8f, 1.0f), vec2(0.0f, 1.0f)),
+    Vertex(vec3(-1.0f,  1.0f,  1.0f), vec3(1.0f, 0.8f, 0.8f), vec2(0.0f, 0.0f), nTop),
+    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.8f, 1.0f, 0.8f), vec2(1.0f, 0.0f), nTop),
+    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.8f, 0.8f, 1.0f), vec2(0.0f, 1.0f), nTop),
     
-    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.8f, 1.0f, 0.8f), vec2(1.0f, 0.0f)),
-    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(1.0f, 0.8f, 1.0f), vec2(1.0f, 1.0f)),
-    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.8f, 0.8f, 1.0f), vec2(0.0f, 1.0f))
+    Vertex(vec3( 1.0f,  1.0f,  1.0f), vec3(0.8f, 1.0f, 0.8f), vec2(1.0f, 0.0f), nTop),
+    Vertex(vec3( 1.0f,  1.0f, -1.0f), vec3(1.0f, 0.8f, 1.0f), vec2(1.0f, 1.0f), nTop),
+    Vertex(vec3(-1.0f,  1.0f, -1.0f), vec3(0.8f, 0.8f, 1.0f), vec2(0.0f, 1.0f), nTop)
 };
-
 
 #endif

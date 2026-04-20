@@ -3,19 +3,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-GLuint createShaderFromSources(const char* vertexShader, const char* fragmentShader){
-    GLuint vs = glCreateShader (GL_VERTEX_SHADER);
+GLuint createShaderFromSources(const char *vertexShader, const char *fragmentShader)
+{
+    GLuint vs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vs, 1, &vertexShader, NULL);
     glCompileShader(vs);
     CHECK_GL_ERRORS();
 
-    GLuint fs = glCreateShader (GL_FRAGMENT_SHADER);
+    GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fs, 1, &fragmentShader, NULL);
     glCompileShader(fs);
     CHECK_GL_ERRORS();
 
-    GLuint shaderProgram = glCreateProgram ();
+    GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, fs);
     glAttachShader(shaderProgram, vs);
     glLinkProgram(shaderProgram);
@@ -35,56 +35,63 @@ GLuint createShaderFromSources(const char* vertexShader, const char* fragmentSha
         free(infoLog);
     }
     CHECK_GL_ERRORS();*/
-    
+
     return shaderProgram;
 }
 
-GLuint createShader(){
+GLuint createShader()
+{
     // Шейдер вершин
-    const char* vertexShader = STRINGIFY_SHADER(
+    const char *vertexShader = STRINGIFY_SHADER(
         attribute vec3 aPos;
-        attribute vec3 aColor;
+        attribute vec3 aNormal;
         attribute vec2 aTexCoord;
-        
+
         uniform mat4 uModelViewProjMat;
-        
-        varying vec3 vColor;
+        uniform mat4 uModelMat;
+
+        varying vec3 FragPos;
+        varying vec3 Normal;
         varying vec2 vTexCoord;
 
-        void main () {
-            gl_Position = uModelViewProjMat * vec4(aPos, 1.0);
-            vColor = aColor;
+        void main() {
+            FragPos = vec3(uModelMat * vec4(aPos, 1.0));
+            Normal = mat3(uModelMat) * aNormal;
             vTexCoord = aTexCoord;
-        }
-    );
+
+            gl_Position = uModelViewProjMat * vec4(aPos, 1.0);
+        });
 
     // Фрагментный шейдер
-   const char* fragmentShader = STRINGIFY_SHADER(
+    const char *fragmentShader = STRINGIFY_SHADER(
         precision mediump float;
-        varying vec3 vColor;
+
+        varying vec3 FragPos;
+        varying vec3 Normal;
         varying vec2 vTexCoord;
-        
+
+        uniform vec3 lightPos;
+        uniform vec3 viewPos;
         uniform sampler2D uTexture;
 
-        void main () {
-            // Создаем квадратную дырку в центре (координаты от 0 до 1)
-            // Центр текстурных координат = (0.5, 0.5)
-            float holeMin = 0.35;  // левая/нижняя граница дырки
-            float holeMax = 0.65;  // правая/верхняя граница дырки
-            
-            // Если пиксель внутри области дырки - отбрасываем его
-            if (vTexCoord.x > holeMin && vTexCoord.x < holeMax && 
-                vTexCoord.y > holeMin && vTexCoord.y < holeMax) {
-                discard;  // это и есть "дырка"!
-            }
-            
-            // Все остальные пиксели рисуем как обычно
-            gl_FragColor = texture2D(uTexture, vTexCoord);
-        }
-    );
+        void main() {
+            vec3 norm = normalize(Normal);
+            vec3 lightDir = normalize(lightPos - FragPos);
+
+            float diff = max(dot(norm, lightDir), 0.0);
+
+            vec3 viewDir = normalize(viewPos - FragPos);
+            vec3 reflectDir = reflect(-lightDir, norm);
+            float spec = pow(max(dot(viewDir, reflectDir), 0.0), 1.0);
+
+            vec3 texColor = texture2D(uTexture, vTexCoord).rgb;
+
+            vec3 result = 0.1 * texColor + diff * texColor + spec * vec3(1.0);
+
+            gl_FragColor = vec4(result, 1.0);
+        });
 
     GLuint shader = createShaderFromSources(vertexShader, fragmentShader);
     CHECK_GL_ERRORS();
     return shader;
 }
-

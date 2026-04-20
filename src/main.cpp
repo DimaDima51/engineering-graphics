@@ -8,9 +8,9 @@
 #include <iostream>
 #include <math.h>
 #include <stdio.h>
-#include <GL/glew.h>        // для поддержки расширений, шейдеров и так далее
-#include <GLFW/glfw3.h>     // Непосредственно сам GLFW
-#include <glm.hpp>          // библиотека графической математики
+#include <GL/glew.h>    // для поддержки расширений, шейдеров и так далее
+#include <GLFW/glfw3.h> // Непосредственно сам GLFW
+#include <glm.hpp>      // библиотека графической математики
 #include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp>
 #include "PngLoader.h"
@@ -34,90 +34,110 @@ bool rightPressed = false;
 double lastCursorPosX = 0.0;
 double lastCursorPosY = 0.0;
 
-void glfwErrorCallback(int error, const char* description) {
+void glfwErrorCallback(int error, const char *description)
+{
     printf("OpenGL error = %d\n description = %s\n\n", error, description);
 }
 
-void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
     // Выходим по нажатию Escape
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    {
     }
     // по пробелу включаем или выключаем вращение автоматом
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
     }
 }
 
-void glfwMouseButtonCallback(GLFWwindow* window, int button, int state, int mod) {
+void glfwMouseButtonCallback(GLFWwindow *window, int button, int state, int mod)
+{
     // обработка левой кнопки
-    if(button == GLFW_MOUSE_BUTTON_1){
-        if(state == GLFW_PRESS){
+    if (button == GLFW_MOUSE_BUTTON_1)
+    {
+        if (state == GLFW_PRESS)
+        {
             leftButtonPressed = true;
-        }else{
+        }
+        else
+        {
             leftButtonPressed = false;
         }
     }
     // обработка правой кнопки
-    if(button == GLFW_MOUSE_BUTTON_2){
-        if(state == GLFW_PRESS){
+    if (button == GLFW_MOUSE_BUTTON_2)
+    {
+        if (state == GLFW_PRESS)
+        {
             rightPressed = true;
-        }else{
+        }
+        else
+        {
             rightPressed = false;
         }
     }
 }
 
-void glfwCursorCallback(GLFWwindow* window, double x, double y) {
+void glfwCursorCallback(GLFWwindow *window, double x, double y)
+{
     // при нажатой левой кнопки - вращаем по X и Y
-    if(leftButtonPressed){
+    if (leftButtonPressed)
+    {
     }
 
     // при нажатой левой кнопки - перемещаем по X Y
-    if(rightPressed){
+    if (rightPressed)
+    {
     }
 
     lastCursorPosX = x;
     lastCursorPosY = y;
 }
 
-void glfwScrollCallback(GLFWwindow* window, double scrollByX, double scrollByY) {
+void glfwScrollCallback(GLFWwindow *window, double scrollByX, double scrollByY)
+{
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 
     // окно
-    GLFWwindow* window = 0;
+    GLFWwindow *window = 0;
 
     // обработчик ошибок
     glfwSetErrorCallback(glfwErrorCallback);
 
     // инициализация GLFW
-    if (!glfwInit()){
+    if (!glfwInit())
+    {
         exit(EXIT_FAILURE);
     }
 
     // создание окна
 #ifdef __APPLE__
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 #else
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 #endif
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
-    if (!window) {
+    if (!window)
+    {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);        // вертикальная синхронизация
+    glfwSwapInterval(1); // вертикальная синхронизация
     CHECK_GL_ERRORS();
 
     // Обработка клавиш и прочего
@@ -130,9 +150,10 @@ int main(int argc, char *argv[]) {
     glewExperimental = GL_TRUE;
     glewInit();
     CHECK_GL_ERRORS();
-    
+
     // Инициализация отладки
-    if(glDebugMessageCallback){
+    if (glDebugMessageCallback)
+    {
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
@@ -144,8 +165,8 @@ int main(int argc, char *argv[]) {
         // glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, &unusedIds, true);
     }
     CHECK_GL_ERRORS();
-    
-    const unsigned char* version = glGetString(GL_VERSION);
+
+    const unsigned char *version = glGetString(GL_VERSION);
     printf("OpenGL version = %s\n", version);
 
     // оотношение сторон
@@ -154,7 +175,7 @@ int main(int argc, char *argv[]) {
     // Размер буффера кадра
     glfwGetFramebufferSize(window, &width, &height);
     CHECK_GL_ERRORS();
-    
+
     // задаем отображение
     glViewport(0, 0, width, height);
     CHECK_GL_ERRORS();
@@ -167,10 +188,14 @@ int main(int argc, char *argv[]) {
     int posAttribLocation = glGetAttribLocation(shaderProgram, "aPos");
     int colorAttribLocation = glGetAttribLocation(shaderProgram, "aColor");
     int texCoordAttribLocation = glGetAttribLocation(shaderProgram, "aTexCoord");
+    int normalAttribLocation = glGetAttribLocation(shaderProgram, "aNormal");
     CHECK_GL_ERRORS();
 
     // юниформы шейдера
     int modelViewProjMatrixLocation = glGetUniformLocation(shaderProgram, "uModelViewProjMat");
+    int lightPosLoc = glGetUniformLocation(shaderProgram, "lightPos");
+    int viewPosLoc = glGetUniformLocation(shaderProgram, "viewPos");
+    int modelMatLoc = glGetUniformLocation(shaderProgram, "uModelMat");
     CHECK_GL_ERRORS();
 
     // VBO, данные о вершинах
@@ -183,9 +208,9 @@ int main(int argc, char *argv[]) {
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     CHECK_GL_ERRORS();
-    
+
     // отключаем отображение задней части полигонов
-    //glEnable(GL_CULL_FACE);
+    // glEnable(GL_CULL_FACE);
     // отбрасываться будут задние грани
     glCullFace(GL_BACK);
     // Определяем, в каком направлении должный обходиться вершины, для передней части (против часовой стрелки?)
@@ -204,26 +229,28 @@ int main(int argc, char *argv[]) {
     // Загрузка текстуры
     ImageData info = loadPngImage("res/test.png");
     uint textureId = 0;
-    if(info.loaded){
+    if (info.loaded)
+    {
         glGenTextures(1, &textureId);
         glBindTexture(GL_TEXTURE_2D, textureId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,              // формат внутри OpenGL
-                     info.width, info.height, 0,            // ширинна, высота, границы
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,                                        // формат внутри OpenGL
+                     info.width, info.height, 0,                                      // ширинна, высота, границы
                      info.withAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, info.data); // формат входных данных
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         CHECK_GL_ERRORS();
     }
-    while (!glfwWindowShouldClose(window)){
+    while (!glfwWindowShouldClose(window))
+    {
         // приращение времени
         double newTime = glfwGetTime();
-        //double timeDelta = newTime - time;
+        // double timeDelta = newTime - time;
         time = newTime;
 
         // wipe the drawing surface clear
         glClearColor(0.0, 0.0, 0.0, 1.0);
-        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram (shaderProgram);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glUseProgram(shaderProgram);
 
         // матрица модель-вид-проекция
         mat4 modelViewProjMatrix = mat4(1.0f);
@@ -247,11 +274,12 @@ int main(int argc, char *argv[]) {
         // Итоговая матрица
         modelViewProjMatrix = projectionMatrix * viewMatrix * modelMatrix;
 
-
         // выставляем матрицу трансформации в пространство OpenGL
         glUniformMatrix4fv(modelViewProjMatrixLocation, 1, false, glm::value_ptr(modelViewProjMatrix));
-        
 
+        glUniform3f(lightPosLoc, 2.0f, 2.0f, 2.0f);
+        glUniform3f(viewPosLoc, 0.0f, 0.0f, 5.0f);
+        glUniformMatrix4fv(modelMatLoc, 1, false, glm::value_ptr(modelMatrix));
 
         // sizeof(Vertex) - размер блока данных о вершине
         // OFFSETOF(Vertex, color) - смещение от начала
@@ -269,11 +297,15 @@ int main(int argc, char *argv[]) {
         glEnableVertexAttribArray(texCoordAttribLocation);
         glVertexAttribPointer(texCoordAttribLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), OFFSETOF(Vertex, texCoord));
 
+        // Нормали (для бликов)
+        glEnableVertexAttribArray(normalAttribLocation);
+        glVertexAttribPointer(normalAttribLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), OFFSETOF(Vertex, normal));
+
         CHECK_GL_ERRORS();
-        
+
         // рисуем
         glDrawArrays(GL_TRIANGLES, 0, cubeVertexCount); // draw points 0-3 from the currently bound VAO with current in-use shader
-        
+
         // VBO off
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
