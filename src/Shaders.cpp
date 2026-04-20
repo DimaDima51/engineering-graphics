@@ -82,7 +82,7 @@ GLuint createShader()
 
             vec3 viewDir = normalize(viewPos - FragPos);
             vec3 reflectDir = reflect(-lightDir, norm);
-            float spec = pow(max(dot(viewDir, reflectDir), 0.0), 1.0);
+            float spec = pow(max(dot(viewDir, reflectDir), 0.0), 10.0);
 
             vec3 texColor = texture2D(uTexture, vTexCoord).rgb;
 

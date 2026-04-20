@@ -7,8 +7,6 @@
 
 using namespace std;
 
-/*
 void loadObjModel(const string& modelPath, std::vector<Vertex>& resultVertexes);
-*/
 
 #endif

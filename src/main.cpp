@@ -204,7 +204,15 @@ int main(int argc, char *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     // glBufferData(GL_ARRAY_BUFFER, triangleVertexCount * sizeof(Vertex), triangleVertexes, GL_STATIC_DRAW); // Треугольник
     // glBufferData(GL_ARRAY_BUFFER, squareVertexCount * sizeof(Vertex), squareVertexes, GL_STATIC_DRAW); // Квадрат
-    glBufferData(GL_ARRAY_BUFFER, cubeVertexCount * sizeof(Vertex), cubeVertexes, GL_STATIC_DRAW); // Куб
+    // glBufferData(GL_ARRAY_BUFFER, cubeVertexCount * sizeof(Vertex), cubeVertexes, GL_STATIC_DRAW); // Куб
+
+    vector<Vertex> sphereVertexes;
+    loadObjModel("res/sphere.obj", sphereVertexes);
+
+    glBufferData(GL_ARRAY_BUFFER,
+                 sphereVertexes.size() * sizeof(Vertex),
+                 &sphereVertexes[0],
+                 GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     CHECK_GL_ERRORS();
@@ -227,7 +235,7 @@ int main(int argc, char *argv[])
     double time = glfwGetTime();
 
     // Загрузка текстуры
-    ImageData info = loadPngImage("res/test.png");
+    ImageData info = loadPngImage("res/Earth.png");
     uint textureId = 0;
     if (info.loaded)
     {
@@ -260,7 +268,15 @@ int main(int argc, char *argv[])
         mat4 projectionMatrix = mat4(1.0f);
 
         // Модель - поворачиваем куб
-        modelMatrix = glm::rotate(modelMatrix, static_cast<float>(time * 2.0f), glm::vec3(0.1f, 0.1f, 0.1f));
+        // modelMatrix = glm::rotate(modelMatrix, static_cast<float>(time * 2.0f), glm::vec3(0.1f, 0.1f, 0.1f));
+
+        modelMatrix = glm::rotate(modelMatrix,
+                                  glm::radians(23.5f),
+                                  glm::vec3(0.0f, 0.0f, 1.0f));
+
+        modelMatrix = glm::rotate(modelMatrix,
+                                  static_cast<float>(time * 0.5f),
+                                  glm::vec3(0.0f, 1.0f, 0.0f));
 
         // Вид - отодвигаем камеру назад, чтобы видеть куб целиком
         viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, -5.0f));
@@ -304,7 +320,9 @@ int main(int argc, char *argv[])
         CHECK_GL_ERRORS();
 
         // рисуем
-        glDrawArrays(GL_TRIANGLES, 0, cubeVertexCount); // draw points 0-3 from the currently bound VAO with current in-use shader
+        // glDrawArrays(GL_TRIANGLES, 0, cubeVertexCount); // draw points 0-3 from the currently bound VAO with current in-use shader
+
+        glDrawArrays(GL_TRIANGLES, 0, sphereVertexes.size());
 
         // VBO off
         glBindBuffer(GL_ARRAY_BUFFER, 0);
