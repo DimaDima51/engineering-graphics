@@ -73,6 +73,9 @@ GLuint createShader()
         uniform vec3 lightPos;
         uniform vec3 viewPos;
         uniform sampler2D uTexture;
+        uniform float uSpecularEnabled;
+        uniform float uEmissiveEnabled;
+        uniform vec3 uEmissiveColor;
 
         void main() {
             vec3 norm = normalize(Normal);
@@ -86,9 +89,36 @@ GLuint createShader()
 
             vec3 texColor = texture2D(uTexture, vTexCoord).rgb;
 
-            vec3 result = 0.1 * texColor + diff * texColor + spec * vec3(1.0);
+            // базовое освещение: 0.1 * цвет текстуры + диффузная компонента + спекулярная компонента (если включена)
+            // спекулярная компонента - это белый блик, умноженный на цвет текстуры и включенный только если uSpecularEnabled = 1.0
+            vec3 result = 0.1 * texColor + diff * texColor + (uSpecularEnabled * spec) * vec3(1.0);
+            result += uEmissiveEnabled * (uEmissiveColor * texColor);
 
             gl_FragColor = vec4(result, 1.0);
+        });
+
+    GLuint shader = createShaderFromSources(vertexShader, fragmentShader);
+    CHECK_GL_ERRORS();
+    return shader;
+}
+
+GLuint createLineShader()
+{
+    const char *vertexShader = STRINGIFY_SHADER(
+        attribute vec3 aPos;
+        attribute vec3 aColor;
+        uniform mat4 uModelViewProjMat;
+        varying vec3 vColor;
+        void main() {
+            vColor = aColor;
+            gl_Position = uModelViewProjMat * vec4(aPos, 1.0);
+        });
+
+    const char *fragmentShader = STRINGIFY_SHADER(
+        precision mediump float;
+        varying vec3 vColor;
+        void main() {
+            gl_FragColor = vec4(vColor, 1.0);
         });
 
     GLuint shader = createShaderFromSources(vertexShader, fragmentShader);

@@ -46,7 +46,7 @@ ImageData loadPngImage(const char* fileName){
     memset(header, 0, headerSize);
     FILE* fp = fopen(fileName, "rb");
     if(fp == NULL){
-        printf("File %s nor found\n", fileName);
+        printf("File %s not found\n", fileName);
         return ImageData(0, NULL, 0, 0, false);
     }
 

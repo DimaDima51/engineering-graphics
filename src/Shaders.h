@@ -4,5 +4,6 @@
 #include <GL/glew.h>        // для поддержки расширений, шейдеров и так далее
 
 GLuint createShader();
+GLuint createLineShader();
 
 #endif
