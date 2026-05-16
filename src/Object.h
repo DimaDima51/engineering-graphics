@@ -32,7 +32,7 @@ public:
     // Конструктор для объектов с орбитальными параметрами. Загружает текстуру из файла. Если загрузка не удалась, создается белая текстура.
     Object(float distance, float tiltDeg, float inclDeg, float rotSpeed, float s, const char* textureFile, bool spec, const vec3 &emissive = vec3(0.0f));
 
-    // отрисовка объекта. Вызывающий код должен был уже привязать VBO и включить атрибуты вершин.
+    // отрисовка объекта
     void render(GLuint shaderProgram,
                 int modelViewProjLoc,
                 int modelMatLoc,

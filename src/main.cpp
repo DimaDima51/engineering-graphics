@@ -113,7 +113,7 @@ void glfwCursorCallback(GLFWwindow *window, double x, double y)
     {
         cameraYaw += static_cast<float>(dx) * rotSpeed;
         cameraPitch += static_cast<float>(dy) * rotSpeed;
-        // необходимо ограничить вертикальный угол, чтобы не было гимбала (когда камера смотрит прямо вверх или вниз и вращение по горизонтали уже не работает)
+        // необходимо ограничить вертикальный угол
         const float limit = glm::radians(89.0f);
         if (cameraPitch > limit)
             cameraPitch = limit;
@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
     // скайбокс
     Object sky(vec3(0.0f), vec3(0.0f, 1.0f, 0.0f), 0.0f, 1000.0f, "res/Stars.png", false);
 
-    // свечение для солнца - включаем и задаем цвет (усиленное)
+    // свечение для солнца - включаем и задаем цвет
     sun.emissiveEnabled = true;
     sun.emissiveColor = vec3(2.0f, 2.0f, 2.0f);
 
@@ -476,7 +476,7 @@ int main(int argc, char *argv[])
 
         glUniform3f(lightPosLoc, 0.0f, 0.0f, 0.0f);
         sun.render(shaderProgram, modelViewProjMatrixLocation, modelMatLoc, viewPosLoc, specularEnabledLoc, emissiveEnabledLoc, emissiveColorLoc, viewMatrix, projectionMatrix, cameraPos, time, static_cast<GLuint>(sphereVertexes.size()));
-        
+
         // орбиты
         const int orbitSegments = 128;
         for (size_t pi = 0; pi < planetDesc.size(); ++pi)
